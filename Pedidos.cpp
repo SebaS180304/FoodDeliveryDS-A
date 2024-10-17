@@ -135,6 +135,8 @@ int Pedidos::comparaFecha(Pedidos fecha){
 }
 
 bool Pedidos::operator<(Pedidos other){
+    if (nombre != other.nombre)
+        return nombre < other.nombre;
     if (mes != other.mes)
         return mes < other.mes;
     if (dia != other.dia)

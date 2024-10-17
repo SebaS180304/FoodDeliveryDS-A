@@ -1,3 +1,4 @@
+// Inclusión de bibliotecas necesarias
 #include "Pedidos.h"
 #include <iostream>
 #include <fstream>
@@ -7,17 +8,16 @@
 
 using namespace std;
 
-// class node: un valor y un puntero a otro nodo
+// Definición de la clase Node para la lista doblemente enlazada circular
 template <class T>
 class Node
 {
 public:
-    //	valor almacenado
-    T value; // <--- Nota que es de tipo T
+    T value;
+    Node<T> *prev;
+    Node<T> *next;
 
-    Node<T> *prev; //	dir del nodo anterior
-    Node<T> *next; //	dir del nodo siguiente
-
+    // Constructor que inicializa el nodo con un valor
     Node(T value)
     {
         this->value = value;
@@ -26,16 +26,16 @@ public:
     }
 };
 
-//  Clase lista enlazada simple:
-//	puntero al primer nodo y tamaño total
+// Definición de la clase List para manejar la lista doblemente enlazada circular
 template <class T>
 class List
 {
-    Node<T> *first; // puntero al primer nodo
-    Node<T> *last;  //	puntero al ultimo nodo
+    Node<T> *first;
+    Node<T> *last;
     int size;
 
 public:
+    // Constructor que inicializa una lista vacía
     List()
     {
         this->first = NULL;
@@ -43,20 +43,21 @@ public:
         this->size = 0;
     }
 
+    // Métodos para manipular la lista
     int getSize() { return size; }
     void showList();
     void showListReverse();
-
     void insertFirst(T);
     void insertLast(T);
     void deleteFirst();
-
     Node<T> *getFirst();
     Node<T> *getLast();
-
     void showList2(int);
 };
 
+// Método para mostrar los primeros 'max' elementos de la lista
+// Complejidad de tiempo: O(n), donde n es el número de elementos a mostrar
+// Complejidad de espacio: O(1)
 template <class T>
 void List<T>::showList2(int max)
 {
@@ -70,9 +71,13 @@ void List<T>::showList2(int max)
         aux = aux->next;
         i++;
     }
-    cout << endl << endl;
+    cout << endl
+         << endl;
 }
 
+// Métodos para obtener el primer y último nodo de la lista
+// Complejidad de tiempo: O(1)
+// Complejidad de espacio: O(1)
 template <class T>
 Node<T> *List<T>::getFirst()
 {
@@ -85,17 +90,23 @@ Node<T> *List<T>::getLast()
     return last;
 }
 
-// inserta al inicio
+// Método para eliminar el primer elemento de la lista
+// Complejidad de tiempo: O(1)
+// Complejidad de espacio: O(1)
 template <class T>
 void List<T>::deleteFirst()
 {
-    if (size == 0) return;
-    
+    if (size == 0)
+        return;
+
     Node<T> *aux = first;
 
-    if (size == 1) {
+    if (size == 1)
+    {
         first = last = NULL;
-    } else {
+    }
+    else
+    {
         Node<T> *second = first->next;
         second->prev = last;
         last->next = second;
@@ -106,7 +117,9 @@ void List<T>::deleteFirst()
     size--;
 }
 
-// inserta al inicio
+// Método para insertar un elemento al inicio de la lista
+// Complejidad de tiempo: O(1)
+// Complejidad de espacio: O(1)
 template <class T>
 void List<T>::insertFirst(T newValue)
 {
@@ -128,7 +141,9 @@ void List<T>::insertFirst(T newValue)
     size++;
 }
 
-// inserta al final
+// Método para insertar un elemento al final de la lista
+// Complejidad de tiempo: O(1)
+// Complejidad de espacio: O(1)
 template <class T>
 void List<T>::insertLast(T newValue)
 {
@@ -150,10 +165,14 @@ void List<T>::insertLast(T newValue)
     size++;
 }
 
+// Método para mostrar la lista en orden
+// Complejidad de tiempo: O(n), donde n es el número de elementos en la lista
+// Complejidad de espacio: O(1)
 template <class T>
 void List<T>::showList()
 {
-    if (size == 0) {
+    if (size == 0)
+    {
         cout << "La lista está vacía" << endl;
         return;
     }
@@ -163,19 +182,25 @@ void List<T>::showList()
 
     cout << "Size: " << size << endl;
 
-    do {
+    do
+    {
         cout << aux->value << "\t";
         aux = aux->next;
         i++;
     } while (i < size && aux != first);
 
-    cout << endl << endl;
+    cout << endl
+         << endl;
 }
 
+// Método para mostrar la lista en orden inverso
+// Complejidad de tiempo: O(n), donde n es el número de elementos en la lista
+// Complejidad de espacio: O(1)
 template <class T>
 void List<T>::showListReverse()
 {
-    if (size == 0) {
+    if (size == 0)
+    {
         cout << "La lista está vacía" << endl;
         return;
     }
@@ -185,23 +210,25 @@ void List<T>::showListReverse()
 
     cout << "Reverse. Size: " << size << endl;
 
-    do {
+    do
+    {
         cout << aux->value << "\t";
         aux = aux->prev;
         i++;
     } while (i < size && aux != last);
 
-    cout << endl << endl;
+    cout << endl
+         << endl;
 }
 
-//	Una clase stack, con una lista enlazada doble dentro
+// Definición de la clase Stack que utiliza la lista doblemente enlazada
 template <class T>
 class Stack
 {
 public:
-    List<T> lista; // Tiene una lista dentro, que guarda cosas de tipo T
+    List<T> lista;
 
-    Stack() {} // Un constructor que no hace nada
+    Stack() {}
 
     void show();
     bool isEmpty();
@@ -209,34 +236,30 @@ public:
     T pop();
 };
 
-//	Mostrar es solo llamar a la funcion show de la lista
+// Métodos de la clase Stack
 template <class T>
 void Stack<T>::show()
 {
     this->lista.showList();
 }
 
-//	isEmpty evalua si la lista tiene 0 elementos
 template <class T>
 bool Stack<T>::isEmpty()
 {
     return lista.getSize() == 0;
 }
 
-// push: agrega un elemento en el top de la stack,
-// aka, el inicio de la lista
 template <class T>
 void Stack<T>::push(T item)
 {
     this->lista.insertFirst(item);
 }
 
-//	pop: consulta y guarda el primer elemento de la lista
-//	elimina el top de la lista y devuelve el valor guardado
 template <class T>
 T Stack<T>::pop()
 {
-    if (isEmpty()) {
+    if (isEmpty())
+    {
         throw std::out_of_range("Stack is empty");
     }
     T topValue = lista.getFirst()->value;
@@ -244,23 +267,21 @@ T Stack<T>::pop()
     return topValue;
 }
 
-//	compara elementos en la particion de L a R
-//	reorganizandolos de acuerdo a las comparaciones con pivot
-//	pivot es el ultimo de la particion
+// Función de partición para QuickSort
+// Complejidad de tiempo: O(n), donde n es el número de elementos entre L y R
+// Complejidad de espacio: O(1)
 template <class T>
 Node<T> *partition(List<T> &datos, Node<T> *L, Node<T> *R)
 {
     Node<T> *j = L;
-    Node<T> *i = L->prev; // Inicializar i como el nodo anterior a L
+    Node<T> *i = L->prev;
     Node<T> *pivot = R;
 
-    //	Compara con pivot e intercambios
     while (j != R)
     {
         if (j->value < pivot->value)
         {
             i = (i == NULL) ? L : i->next;
-            // Intercambio manual sin usar swap
             T temp = i->value;
             i->value = j->value;
             j->value = temp;
@@ -269,16 +290,16 @@ Node<T> *partition(List<T> &datos, Node<T> *L, Node<T> *R)
     }
 
     i = (i == NULL) ? L : i->next;
-    // Intercambio manual sin usar swap
     T temp = i->value;
     i->value = pivot->value;
     pivot->value = temp;
 
-    return i; //	Devuelve la direccion de donde quedo el valor pivote
+    return i;
 }
 
-//	quicksort
-//	Reordena por particiones iterativamente
+// Implementación de QuickSort
+// Complejidad de tiempo: O(n log n) en promedio, O(n^2) en el peor caso
+// Complejidad de espacio: O(log n) debido a la pila de recursión
 template <class T>
 void quickSort(List<T> &datos)
 {
@@ -312,7 +333,9 @@ void quickSort(List<T> &datos)
     }
 }
 
-// Función para contar cuántas órdenes hay en el archivo
+// Función para contar el número de órdenes en el archivo
+// Complejidad de tiempo: O(n), donde n es el número de líneas en el archivo
+// Complejidad de espacio: O(1)
 int numOrdenes()
 {
     ifstream dbo("orders.txt");
@@ -324,7 +347,6 @@ int numOrdenes()
 
     int i = 0;
     string sline;
-    // Contar cuántas líneas hay en el archivo
     while (getline(dbo, sline))
     {
         i++;
@@ -334,7 +356,9 @@ int numOrdenes()
     return i;
 }
 
-// Función para obtener el número del mes
+// Función para convertir el nombre del mes a su número correspondiente
+// Complejidad de tiempo: O(1)
+// Complejidad de espacio: O(1)
 int obtenerMes(string mes)
 {
     if (mes == "ene")
@@ -361,17 +385,18 @@ int obtenerMes(string mes)
         return 11;
     else if (mes == "Dic")
         return 12;
-    return -1; // Si no coincide ningún mes
+    return -1;
 }
 
-// Función para guardar la información de los pedidos en la lista
+// Función para leer los pedidos del archivo y almacenarlos en la lista
+// Complejidad de tiempo: O(n), donde n es el número de líneas en el archivo
+// Complejidad de espacio: O(n), donde n es el número de pedidos leídos
 void leePedidos(List<Pedidos> &pedidos, int ordenes)
 {
     ifstream dbo;
     int mes, dia, hr, min, seg, i;
     string n, o, sline;
 
-    // Verifica que el archivo se haya abierto correctamente
     dbo.open("orders.txt", ios::in);
     if (dbo.fail())
     {
@@ -379,45 +404,103 @@ void leePedidos(List<Pedidos> &pedidos, int ordenes)
         exit(1);
     }
 
-    // Lee línea a línea
     while (getline(dbo, sline) && pedidos.getSize() < ordenes)
     {
         string line = sline;
 
-        // Se obtiene el mes
+        // Extracción de datos de cada línea
         i = line.find(" ");
         string mesStr = line.substr(0, i);
         mes = obtenerMes(mesStr);
 
-        // Obtiene el día
         line = line.substr(i + 1);
         i = line.find(" ");
         dia = stoi(line.substr(0, i));
 
-        // Obtiene la hora
         line = line.substr(i + 1);
         i = line.find(" ");
         string hora = line.substr(0, i);
         sscanf(hora.c_str(), "%d:%d:%d", &hr, &min, &seg);
 
-        // Obtiene el nombre (lo que sigue a "R:")
-        line = line.substr(i + 1); // Saltar la hora
+        line = line.substr(i + 1);
         i = line.find("R:");
-        line = line.substr(i + 2); // Saltar "R:"
+        line = line.substr(i + 2);
 
-        i = line.find("O:");                   // Buscar "O:" para separar el nombre de la orden
-        string nombre = line.substr(0, i - 1); // Eliminar el espacio adicional
+        i = line.find("O:");
+        string nombre = line.substr(0, i - 1);
 
-        // Obtiene la orden (lo que sigue a "O:")
-        string orden = line.substr(i + 2); // Saltar "O:"
+        string orden = line.substr(i + 2);
 
-        // Crear un objeto de la clase Pedidos con los datos obtenidos
+        // Creación y adición del nuevo pedido a la lista
         Pedidos nuevoPedido(mes, dia, hr, min, seg, nombre, orden);
         pedidos.insertLast(nuevoPedido);
     }
     dbo.close();
 }
 
+// Función para buscar pedidos por nombre de restaurante
+// Complejidad de tiempo: O(n), donde n es el número de pedidos en la lista
+// Complejidad de espacio: O(m), donde m es el número de pedidos encontrados
+void buscarPorRestaurante(List<Pedidos> &pedidos)
+{
+    string nombreBuscado;
+    cout << "Ingrese el nombre del restaurante a buscar: ";
+    getline(cin, nombreBuscado);
+
+    List<Pedidos> resultados;
+    Node<Pedidos> *actual = pedidos.getFirst();
+    int contador = 0;
+
+    do
+    {
+        if (actual->value.getNombre() == nombreBuscado)
+        {
+            resultados.insertLast(actual->value);
+            contador++;
+        }
+        actual = actual->next;
+    } while (actual != pedidos.getFirst());
+
+    if (contador > 0)
+    {
+        cout << "Se encontraron " << contador << " registros para el restaurante " << nombreBuscado << " :" << endl;
+        quickSort(resultados);
+        resultados.showList2(contador);
+    }
+    else
+    {
+        cout << "No se encontraron registros para el restaurante " << nombreBuscado << "." << endl;
+    }
+}
+
+// Función para guardar los pedidos ordenados en un archivo
+// Complejidad de tiempo: O(n), donde n es el número de pedidos en la lista
+// Complejidad de espacio: O(1)
+void guardarPedidosOrdenados(List<Pedidos> &pedidos, string &nombreArchivo)
+{
+    ofstream archivo(nombreArchivo);
+    if (!archivo.is_open())
+    {
+        cout << "No se pudo abrir el archivo para escribir." << endl;
+        return;
+    }
+
+    Node<Pedidos> *actual = pedidos.getFirst();
+    do
+    {
+        archivo << actual->value.getMesStr() << " "
+                << actual->value.getDia() << " "
+                << actual->value.getHr() << ":" << actual->value.getMin() << ":" << actual->value.getSeg() << " "
+                << "R:" << actual->value.getNombre() << " "
+                << "O:" << actual->value.getOrden() << endl;
+        actual = actual->next;
+    } while (actual != pedidos.getFirst());
+
+    archivo.close();
+    cout << "Pedidos ordenados guardados en " << nombreArchivo << endl;
+}
+
+// Función principal
 int main()
 {
     int ordenes = numOrdenes();
@@ -430,9 +513,14 @@ int main()
     pedidos.showList2(10);
 
     quickSort(pedidos);
-    
+
     cout << "Lista ordenada:" << endl;
     pedidos.showList2(10);
+
+    buscarPorRestaurante(pedidos);
+
+    string nombreArchivo = "orden(ados).txt";
+    guardarPedidosOrdenados(pedidos, nombreArchivo);
 
     return 0;
 }
