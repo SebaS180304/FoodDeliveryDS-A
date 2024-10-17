@@ -182,12 +182,13 @@ void List<T>::showList()
 
     cout << "Size: " << size << endl;
 
-    do
+    while (i < size)
     {
         cout << aux->value << "\t";
         aux = aux->next;
         i++;
-    } while (i < size && aux != first);
+        if (aux == first) break;
+    }
 
     cout << endl
          << endl;
@@ -210,12 +211,13 @@ void List<T>::showListReverse()
 
     cout << "Reverse. Size: " << size << endl;
 
-    do
+    while (i < size)
     {
         cout << aux->value << "\t";
         aux = aux->prev;
         i++;
-    } while (i < size && aux != last);
+        if (aux == last) break;
+    }
 
     cout << endl
          << endl;
@@ -451,7 +453,7 @@ void buscarPorRestaurante(List<Pedidos> &pedidos)
     Node<Pedidos> *actual = pedidos.getFirst();
     int contador = 0;
 
-    do
+    while (true)
     {
         if (actual->value.getNombre() == nombreBuscado)
         {
@@ -459,7 +461,8 @@ void buscarPorRestaurante(List<Pedidos> &pedidos)
             contador++;
         }
         actual = actual->next;
-    } while (actual != pedidos.getFirst());
+        if (actual == pedidos.getFirst()) break;
+    }
 
     if (contador > 0)
     {
@@ -486,7 +489,7 @@ void guardarPedidosOrdenados(List<Pedidos> &pedidos, string &nombreArchivo)
     }
 
     Node<Pedidos> *actual = pedidos.getFirst();
-    do
+    while (true)
     {
         archivo << actual->value.getMesStr() << " "
                 << actual->value.getDia() << " "
@@ -494,7 +497,8 @@ void guardarPedidosOrdenados(List<Pedidos> &pedidos, string &nombreArchivo)
                 << "R:" << actual->value.getNombre() << " "
                 << "O:" << actual->value.getOrden() << endl;
         actual = actual->next;
-    } while (actual != pedidos.getFirst());
+        if (actual == pedidos.getFirst()) break;
+    }
 
     archivo.close();
     cout << "Pedidos ordenados guardados en " << nombreArchivo << endl;
